@@ -1,5 +1,7 @@
 # LLM Pi
 
+[![CI](https://github.com/sgibson91/llm-pi/actions/workflows/ci.yaml/badge.svg)](https://github.com/sgibson91/llm-pi/actions/workflows/ci.yaml)
+
 **A Raspberry Pi Configuration for running local LLMs with workflow automation**
 
 Run a local large language model on your Raspberry Pi with a browser-based workflow builder — no cloud dependency, no API keys, no data leaving your network.
