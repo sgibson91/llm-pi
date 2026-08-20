@@ -1,0 +1,39 @@
+# {{ ansible_managed }}
+# n8n connects to Ollama at http://ollama:11434 (Docker internal DNS).
+---
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "{{ ollama_port }}:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+{% if ollama_num_parallel is defined or ollama_max_loaded_models is defined %}
+    environment:
+{% if ollama_num_parallel is defined %}
+      - OLLAMA_NUM_PARALLEL={{ ollama_num_parallel }}
+{% endif %}
+{% if ollama_max_loaded_models is defined %}
+      - OLLAMA_MAX_LOADED_MODELS={{ ollama_max_loaded_models }}
+{% endif %}
+{% endif %}
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "{{ n8n_port }}:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    environment:
+      - N8N_HOST=0.0.0.0
+      - WEBHOOK_URL=http://{{ n8n_webhook_host }}:{{ n8n_port }}/
+    depends_on:
+      - ollama
+
+volumes:
+  ollama_data:
+  n8n_data:

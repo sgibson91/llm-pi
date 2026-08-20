@@ -1,0 +1,33 @@
+---
+- name: Create project directory.
+  ansible.builtin.file:
+    path: "{{ config_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy docker-compose.yml into place.
+  ansible.builtin.template:
+    src: templates/docker-compose.yml.j2
+    dest: "{{ config_dir }}/docker-compose.yml"
+    mode: "0644"
+  notify: Restart ollama-n8n
+
+- name: Ensure ollama-n8n environment is running.
+  community.docker.docker_compose_v2:
+    project_src: "{{ config_dir }}"
+    build: never
+
+- name: Wait for Ollama API to be ready.
+  ansible.builtin.wait_for:
+    host: 127.0.0.1
+    port: "{{ ollama_port }}"
+    timeout: 60
+
+- name: Pull models.
+  ansible.builtin.command:
+    cmd: "docker exec ollama ollama pull {{ item }}"
+  loop: "{{ ollama_models }}"
+  register: pull_result
+  changed_when: "'pulling' in pull_result.stdout"
+  # ponytail: no async guard — pull on a Pi 4 over slow network could exceed SSH timeout.
+  # Upgrade path: add async + poll, or run with -T 600.

@@ -1,0 +1,15 @@
+---
+# Location where configuration files will be stored.
+config_dir: /opt/ollama-n8n
+
+# Ollama configuration.
+ollama_models:
+  - "llama3.2:1b"
+ollama_port: 11434
+# Uncomment to constrain resources on a 4 GB Pi:
+# ollama_num_parallel: 1
+# ollama_max_loaded_models: 1
+
+# n8n configuration.
+n8n_port: 5678
+n8n_webhook_host: localhost
