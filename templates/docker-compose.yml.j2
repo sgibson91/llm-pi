@@ -31,7 +31,9 @@ services:
     environment:
       - N8N_HOST=0.0.0.0
       - N8N_SECURE_COOKIE=false
-      - WEBHOOK_URL=http://{{ n8n_webhook_host }}:{{ n8n_port }}/
+      - N8N_WEBHOOK_URL=http://{{ n8n_webhook_host }}:{{ n8n_port }}/
+      - N8N_RUNNERS_MODE=internal_nodejs
+      - N8N_RUNNERS_TASK_TIMEOUT=300
 {% if n8n_owner_email is defined %}
       - N8N_INSTANCE_OWNER_MANAGED_BY_ENV=true
       - N8N_INSTANCE_OWNER_EMAIL={{ n8n_owner_email }}
