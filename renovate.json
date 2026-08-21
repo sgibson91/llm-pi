@@ -5,5 +5,11 @@
     "managerFilePatterns": [
       "/templates/docker-compose\\.yml\\.j2$/"
     ]
-  }
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ]
 }
