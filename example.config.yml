@@ -13,3 +13,8 @@ ollama_port: 11434
 # n8n configuration.
 n8n_port: 5678
 n8n_webhook_host: localhost
+# Uncomment to pre-provision the n8n instance owner (skips setup screen):
+# n8n_owner_email: you@example.com
+# n8n_owner_first_name: Your
+# n8n_owner_last_name: Name
+# n8n_owner_password_hash: "$2b$10$..." # bcrypt hash of your password
