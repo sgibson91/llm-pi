@@ -30,6 +30,7 @@ services:
       - n8n_data:/home/node/.n8n
     environment:
       - N8N_HOST=0.0.0.0
+      - N8N_SECURE_COOKIE=false
       - WEBHOOK_URL=http://{{ n8n_webhook_host }}:{{ n8n_port }}/
     depends_on:
       - ollama
