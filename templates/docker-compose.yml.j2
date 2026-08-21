@@ -19,6 +19,8 @@ services:
       - OLLAMA_MAX_LOADED_MODELS={{ ollama_max_loaded_models }}
 {% endif %}
 {% endif %}
+    networks:
+      - internal
 
   n8n:
     image: n8nio/n8n:2.36.4
@@ -34,7 +36,16 @@ services:
       - WEBHOOK_URL=http://{{ n8n_webhook_host }}:{{ n8n_port }}/
     depends_on:
       - ollama
+    networks:
+      - internal
+      - external
 
 volumes:
   ollama_data:
   n8n_data:
+
+networks:
+  internal:
+    internal: true
+  external:
+    driver: bridge
