@@ -32,6 +32,13 @@ services:
       - N8N_HOST=0.0.0.0
       - N8N_SECURE_COOKIE=false
       - WEBHOOK_URL=http://{{ n8n_webhook_host }}:{{ n8n_port }}/
+{% if n8n_owner_email is defined %}
+      - N8N_INSTANCE_OWNER_MANAGED_BY_ENV=true
+      - N8N_INSTANCE_OWNER_EMAIL={{ n8n_owner_email }}
+      - N8N_INSTANCE_OWNER_FIRST_NAME={{ n8n_owner_first_name }}
+      - N8N_INSTANCE_OWNER_LAST_NAME={{ n8n_owner_last_name }}
+      - N8N_INSTANCE_OWNER_PASSWORD_HASH={{ n8n_owner_password_hash }}
+{% endif %}
     depends_on:
       - ollama
 
