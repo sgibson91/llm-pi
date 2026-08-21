@@ -28,3 +28,10 @@ jobs:
         run: |
           yamllint .
           ansible-lint
+
+  validate-renovate:
+    name: Validate Renovate Config
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Renovate Configuration with renovate-config-validator
+        uses: suzuki-shunsuke/github-action-renovate-config-validator@v2.1.0
