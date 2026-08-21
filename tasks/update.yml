@@ -1,0 +1,15 @@
+---
+- name: Copy update script into place.
+  ansible.builtin.copy:
+    src: update.sh
+    dest: "{{ config_dir }}/update.sh"
+    mode: "0755"
+
+- name: Schedule weekly image update via cron.
+  ansible.builtin.cron:
+    name: "llm-pi image update"
+    job: "{{ config_dir }}/update.sh >> /var/log/llm-pi-update.log 2>&1"
+    weekday: "0"
+    hour: "3"
+    minute: "0"
+    user: root
