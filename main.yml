@@ -15,6 +15,11 @@
         update_cache: true
         cache_valid_time: 3600
 
+    - name: Ensure yq is installed.
+      ansible.builtin.apt:
+        name: yq
+        state: present
+
   handlers:
     - name: Include handlers.
       ansible.builtin.import_tasks: tasks/handlers.yml
@@ -25,3 +30,6 @@
 
     - name: Set up Ollama + n8n.
       ansible.builtin.import_tasks: tasks/ollama-n8n.yml
+
+    - name: Set up automatic image updates.
+      ansible.builtin.import_tasks: tasks/update.yml
