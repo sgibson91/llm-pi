@@ -18,3 +18,4 @@ n8n_webhook_host: localhost
 # n8n_owner_first_name: Your
 # n8n_owner_last_name: Name
 # n8n_owner_password_hash: "$2b$10$..." # bcrypt hash of your password
+# n8n_license_activation_key: your-activation-key
