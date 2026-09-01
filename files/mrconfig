@@ -1,0 +1,12 @@
+[DEFAULT]
+jobs = 5
+up = git stash --include-untracked || true; git switch $(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@') && git pull && (git stash pop || true)
+
+[src/github/fanshim-python]
+checkout = git clone 'https://github.com/sgibson91/fanshim-python.git' 'fanshim-python'
+install = sudo ./examples/install-service.sh --preempt
+
+[src/github/llm-pi]
+checkout = git clone 'https://github.com/sgibson91/llm-pi.git' 'llm-pi'
+deps = ansible-galaxy collection install -r requirements.yml
+run = ansible-playbook main.yml

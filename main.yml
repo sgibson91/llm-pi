@@ -20,6 +20,9 @@
         name: yq
         state: present
 
+    - name: Set up myrepos.
+      ansible.builtin.import_tasks: tasks/myrepos.yml
+
   handlers:
     - name: Include handlers.
       ansible.builtin.import_tasks: tasks/handlers.yml
