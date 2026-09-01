@@ -15,10 +15,15 @@
         update_cache: true
         cache_valid_time: 3600
 
-    - name: Ensure yq is installed.
+    - name: Ensure base packages are installed.
       ansible.builtin.apt:
-        name: yq
+        name:
+          - python3
+          - yq
         state: present
+
+    - name: Set up myrepos.
+      ansible.builtin.import_tasks: tasks/myrepos.yml
 
   handlers:
     - name: Include handlers.

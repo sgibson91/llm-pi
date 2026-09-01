@@ -1,0 +1,58 @@
+---
+- name: Ensure myrepos is installed.
+  ansible.builtin.apt:
+    name: myrepos
+    state: present
+
+- name: Resolve home directory of the target user.
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ ansible_user }}"
+
+- name: Set user home fact.
+  ansible.builtin.set_fact:
+    mr_user_home: "{{ getent_passwd[ansible_user][4] }}"
+
+- name: Copy .mrconfig into place.
+  ansible.builtin.copy:
+    src: mrconfig
+    dest: "{{ mr_user_home }}/.mrconfig"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+
+# Repos are checked out relative to ~/ (the .mrconfig location), so run mr from home.
+# State is defined by whether each repo directory already exists.
+- name: Check whether managed repos already exist.
+  ansible.builtin.stat:
+    path: "{{ mr_user_home }}/{{ item }}"
+  loop:
+    - src/github/fanshim-python
+    - src/github/llm-pi
+  register: mr_repo_stat
+
+- name: Run mr checkout to clone missing repos.
+  ansible.builtin.command:
+    cmd: mr --trust-all checkout
+    chdir: "{{ mr_user_home }}"
+  become: true
+  become_user: "{{ ansible_user }}"
+  when: not (mr_repo_stat.results | map(attribute='stat.exists') | min)
+  changed_when: true
+
+- name: Install the fanshim-python service via mr.
+  ansible.builtin.command:
+    cmd: mr --trust-all install
+    chdir: "{{ mr_user_home }}/src/github/fanshim-python"
+  become: true
+  become_user: "{{ ansible_user }}"
+  register: mr_install_result
+  changed_when: "'already installed' not in mr_install_result.stdout"
+
+- name: Schedule nightly 'mr up' via cron.
+  ansible.builtin.cron:
+    name: "myrepos nightly update"
+    job: "cd {{ mr_user_home }} && mr --trust-all up >> {{ mr_user_home }}/.mr-up.log 2>&1"
+    hour: "2"
+    minute: "0"
+    user: "{{ ansible_user }}"
