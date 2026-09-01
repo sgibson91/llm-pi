@@ -22,6 +22,20 @@
           - yq
         state: present
 
+    # When running over SSH (i.e. not a local connection), install Ansible
+    # and its collection requirements.
+    - name: Install Ansible on the host (remote connections only).
+      ansible.builtin.command: python -m pip install ansible
+      changed_when: false
+      when: ansible_connection | default('ssh') != 'local'
+
+    - name: Install Ansible collection requirements on the host (remote connections only).
+      ansible.builtin.command: ansible-galaxy collection install -r requirements.yml
+      args:
+        chdir: "{{ playbook_dir }}"
+      changed_when: false
+      when: ansible_connection | default('ssh') != 'local'
+
     - name: Set up myrepos.
       ansible.builtin.import_tasks: tasks/myrepos.yml
 
