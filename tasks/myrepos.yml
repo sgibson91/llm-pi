@@ -11,7 +11,7 @@
 
 - name: Set user home fact.
   ansible.builtin.set_fact:
-    mr_user_home: "{{ getent_passwd[ansible_user][4] }}"
+    mr_user_home: "{{ ansible_facts['getent_passwd'][ansible_user][4] }}"
 
 - name: Copy .mrconfig into place.
   ansible.builtin.copy:
