@@ -3,7 +3,7 @@
 ---
 services:
   ollama:
-    image: ollama/ollama:0.33.2
+    image: ollama/ollama:latest
     container_name: ollama
     restart: unless-stopped
     ports:
@@ -21,7 +21,7 @@ services:
 {% endif %}
 
   n8n:
-    image: n8nio/n8n:2.38.1
+    image: n8nio/n8n:latest
     container_name: n8n
     restart: unless-stopped
     ports:
