@@ -34,6 +34,8 @@ The configuration is tested against Raspberry Pi OS (64-bit) and should work on 
      - `example.config.yml` to `config.yml`
   5. Run the playbook: `ansible-playbook main.yml`
 
+> **Running over SSH**: When the playbook runs against a remote host (any connection other than `local`), it installs Ansible and the collection requirements on the Pi itself before configuring it. The Pi therefore needs `python3-pip` available (`sudo apt-get install -y python3-pip`).
+
 > **If running locally on the Pi**: You may encounter a "permission denied" error connecting to the Docker daemon. If so, log out and back in (or reboot), then run the playbook again. If the error persists: `sudo usermod -aG docker $USER`
 
 > **Slow model pulls**: On a slow connection, the model pull may exceed the SSH timeout. Run with `-T 600` to increase it: `ansible-playbook main.yml -T 600`
