@@ -28,13 +28,14 @@ services:
       - "{{ n8n_port }}:5678"
     volumes:
       - n8n_data:/home/node/.n8n
-      - {{ config_dir }}/prompts:/prompts:ro
+      - {{ config_dir }}/prompts:/prompts
     environment:
       - N8N_HOST=0.0.0.0
       - N8N_SECURE_COOKIE=false
       - N8N_WEBHOOK_URL=http://{{ n8n_webhook_host }}:{{ n8n_port }}/
       - N8N_RUNNERS_MODE=internal_nodejs
       - N8N_RUNNERS_TASK_TIMEOUT=600
+      - N8N_RESTRICT_FILE_ACCESS_TO=/prompts
 {% if n8n_owner_email is defined %}
       - N8N_INSTANCE_OWNER_MANAGED_BY_ENV=true
       - N8N_INSTANCE_OWNER_EMAIL={{ n8n_owner_email }}
