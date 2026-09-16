@@ -5,6 +5,13 @@
     state: directory
     mode: "0755"
 
+- name: Copy prompt library into place.
+  ansible.builtin.copy:
+    src: files/prompts/
+    dest: "{{ config_dir }}/prompts/"
+    mode: "0644"
+  notify: Restart ollama-n8n
+
 - name: Copy docker-compose.yml into place.
   ansible.builtin.template:
     src: templates/docker-compose.yml.j2
